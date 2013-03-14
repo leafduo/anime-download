@@ -3,7 +3,7 @@
     "version": "0.0.1",
     "private": true,
     "dependencies": {
-        "feedparser": "~0.13.2",
+        "feedparser": "~0.13.2"
     },
     "license": "MIT"
 }

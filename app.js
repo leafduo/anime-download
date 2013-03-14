@@ -1,6 +1,7 @@
 var feedparser = require('feedparser')
   , child_process = require('child_process')
   , fs = require('fs')
+  , colors = require('colors')
   ;
 
 var links = [];
@@ -18,7 +19,7 @@ var handleArticle = function(article) {
 
 var addLinks = function() {
     var nextLoop = function() {
-        console.log('Wait for next fetch');
+        console.log('Wait for next fetch'.green);
         setTimeout(function() {
             parse()
         }, 600*1000);
@@ -42,11 +43,12 @@ function loadRegularExpressions() {
     res = res.map(function(element) {
         return RegExp(element);
     });
-    console.log('Regular expressions:');
+    console.log('Regular expressions:'.green);
     console.log(res);
 }
 
 function parse() {
+    console.log('Anime to download:'.green);
     feedparser.parseUrl('http://share.dmhy.org/topics/rss/rss.xml')
     .on('article', handleArticle)
     .on('complete', addLinks);

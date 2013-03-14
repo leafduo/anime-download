@@ -18,6 +18,7 @@ var handleArticle = function(article) {
 
 var addLinks = function() {
     var nextLoop = function() {
+        console.log('Wait for next fetch');
         setTimeout(function() {
             parse()
         }, 600*1000);
@@ -26,11 +27,11 @@ var addLinks = function() {
     if (!links.length) {
         console.log('No download will be added.');
         nextLoop();
-        return;
+    } else {
+        var child = child_process.execFile('xunlei-lixian/lixian_cli.py', ['add', '--bt'].concat(links), nextLoop);
+        child.stdout.pipe(process.stdout, { end: false });
+        child.stderr.pipe(process.stderr, { end: false });
     }
-    var child = child_process.execFile('python', ['/Users/leafduo/bin/xunlei-lixian/lixian_cli.py', 'add', '--bt'].concat(links), nextLoop);
-    child.stdout.pipe(process.stdout, { end: false });
-    child.stderr.pipe(process.stderr, { end: false });
 }
 
 function loadRegularExpressions() {
@@ -41,6 +42,7 @@ function loadRegularExpressions() {
     res = res.map(function(element) {
         return RegExp(element);
     });
+    console.log('Regular expressions:');
     console.log(res);
 }
 

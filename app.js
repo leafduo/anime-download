@@ -17,11 +17,18 @@ var handleArticle = function(article) {
 }
 
 var addLinks = function() {
+    var nextLoop = function() {
+        setTimeout(function() {
+            parse()
+        }, 600*1000);
+    };
+
     if (!links.length) {
         console.log('No download will be added.');
+        nextLoop();
         return;
     }
-    var child = child_process.execFile('python', ['/Users/leafduo/bin/xunlei-lixian/lixian_cli.py', 'add', '--bt'].concat(links));
+    var child = child_process.execFile('python', ['/Users/leafduo/bin/xunlei-lixian/lixian_cli.py', 'add', '--bt'].concat(links), nextLoop);
     child.stdout.pipe(process.stdout, { end: false });
     child.stderr.pipe(process.stderr, { end: false });
 }
@@ -37,8 +44,11 @@ function loadRegularExpressions() {
     console.log(res);
 }
 
-loadRegularExpressions()
+function parse() {
+    feedparser.parseUrl('http://share.dmhy.org/topics/rss/rss.xml')
+    .on('article', handleArticle)
+    .on('complete', addLinks);
+}
 
-feedparser.parseUrl('http://share.dmhy.org/topics/rss/rss.xml')
-  .on('article', handleArticle)
-  .on('complete', addLinks);
+loadRegularExpressions();
+parse();

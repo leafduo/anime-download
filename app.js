@@ -41,6 +41,9 @@ function loadRegularExpressions() {
         return element.length;
     });
     res = res.map(function(element) {
+        element = element.replace(/ /g, ".*");
+        element = element.replace(/\[/g, "\\[");
+        element = element.replace(/\]/g, "\\]");
         return RegExp(element);
     });
     console.log('Regular expressions:'.green);
